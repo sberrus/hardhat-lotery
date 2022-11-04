@@ -13,12 +13,18 @@ pragma solidity ^0.8.7;
 error Raffle__NotEnoughtEthEntered();
 
 contract Raffle {
+	/** State Variables */
 	uint256 private immutable i_entranceFee;
 	address payable[] private s_players;
-
 	// {i_*} se usa para declarar una variable immutable.
 	// las variables immutables se deben inicializar en el constructor.
 	// No confundir con las variables
+
+	/** Events */
+	event RaffleEnter(address indexed player);
+
+	// Los eventos se recomienda que se nombren con el mismo nombre de la función
+	// que lo ejecuta pero, invertido.
 
 	constructor(uint256 entranceFee) {
 		i_entranceFee = entranceFee;
@@ -30,8 +36,11 @@ contract Raffle {
 		if (msg.value < i_entranceFee) {
 			revert Raffle__NotEnoughtEthEntered();
 		}
-
+		// agrega el address que ejecuto el contrato al array de jugadores
 		s_players.push(payable(msg.sender));
+
+		// emitir evento cada vez que se inscriban participantes a la rifa.
+		emit RaffleEnter(msg.sender);
 	}
 
 	// function pickRandomWinner() {}

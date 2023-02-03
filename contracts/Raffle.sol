@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
+// imports
+import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+
 // RAFFLE
 
 // requisitos:
@@ -12,7 +15,7 @@ pragma solidity ^0.8.7;
 
 error Raffle__NotEnoughtEthEntered();
 
-contract Raffle {
+contract Raffle is VRFConsumerBaseV2 {
 	/** State Variables */
 	uint256 private immutable i_entranceFee;
 	address payable[] private s_players;
@@ -26,7 +29,7 @@ contract Raffle {
 	// Los eventos se recomienda que se nombren con el mismo nombre de la función
 	// que lo ejecuta pero, invertido.
 
-	constructor(uint256 entranceFee) {
+	constructor(address vrfCoordinatorV2, uint256 entranceFee) VRFConsumerBaseV2(vrfCoordinatorV2) {
 		i_entranceFee = entranceFee;
 	}
 
@@ -43,7 +46,14 @@ contract Raffle {
 		emit RaffleEnter(msg.sender);
 	}
 
-	// function pickRandomWinner() {}
+	function requestRandomWinner() external {
+		// request rando number
+		// once we get it, do something with it
+		// 2 transaction process
+	}
+
+	// función que llama los numeros aleatorios.
+	function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal override {}
 
 	// GETERS
 	function getEntranceFee() public view returns (uint256) {
